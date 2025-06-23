@@ -1,11 +1,11 @@
-let links = JSON.parse(localStorage.getItem('fbLinks')) || [];
-let accounts = JSON.parse(localStorage.getItem('fbAccounts')) || [];
+// تعريف المتغيرات
+let links = []; // الروابط مؤقتة
+let accounts = JSON.parse(localStorage.getItem('fbAccounts')) || []; // الحسابات محفوظة
 
 function addLink() {
   const linkInput = document.getElementById('linkInput').value;
   if (linkInput && linkInput.includes('facebook.com')) {
     links.push(linkInput);
-    localStorage.setItem('fbLinks', JSON.stringify(links));
     displayLinks();
     document.getElementById('linkInput').value = '';
   } else {
@@ -18,9 +18,9 @@ function addAccount() {
   const [email, pass] = accountInput.split(':');
   if (email && pass) {
     accounts.push({ email, pass });
-    localStorage.setItem('fbAccounts', JSON.stringify(accounts));
-    displayAccounts();
+    localStorage.setItem('fbAccounts', JSON.stringify(accounts)); // حفظ الحسابات
     document.getElementById('accountInput').value = '';
+    alert('تم إضافة الحساب بنجاح!');
   } else {
     alert('أدخل بيانات الحساب بالصيغة: إيميل:كلمة سر');
   }
@@ -29,37 +29,49 @@ function addAccount() {
 function displayLinks() {
   const linkList = document.getElementById('linkList');
   linkList.innerHTML = '';
-  links.forEach((link, index) => {
-    const li = document.createElement('li');
-    li.textContent = link;
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'حذف';
-    deleteBtn.onclick = () => {
-      links.splice(index, 1);
-      localStorage.setItem('fbLinks', JSON.stringify(links));
-      displayLinks();
-    };
-    li.appendChild(deleteBtn);
-    linkList.appendChild(li);
-  });
+  if (links.length > 0) {
+    links.forEach((link, index) => {
+      const li = document.createElement('li');
+      li.textContent = link;
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'حذف';
+      deleteBtn.onclick = () => {
+        links.splice(index, 1);
+        displayLinks();
+      };
+      li.appendChild(deleteBtn);
+      linkList.appendChild(li);
+    });
+  } else {
+    linkList.innerHTML = '<li>لا يوجد روابط مضافة</li>';
+  }
 }
 
-function displayAccounts() {
+function toggleAccounts() {
   const accountList = document.getElementById('accountList');
-  accountList.innerHTML = '';
-  accounts.forEach((account, index) => {
-    const li = document.createElement('li');
-    li.textContent = account.email;
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'حذف';
-    deleteBtn.onclick = () => {
-      accounts.splice(index, 1);
-      localStorage.setItem('fbAccounts', JSON.stringify(accounts));
-      displayAccounts();
-    };
-    li.appendChild(deleteBtn);
-    accountList.appendChild(li);
-  });
+  if (accountList.style.display === 'none' || accountList.style.display === '') {
+    accountList.style.display = 'block';
+    accountList.innerHTML = '';
+    if (accounts.length > 0) {
+      accounts.forEach((account, index) => {
+        const li = document.createElement('li');
+        li.textContent = account.email;
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'حذف';
+        deleteBtn.onclick = () => {
+          accounts.splice(index, 1);
+          localStorage.setItem('fbAccounts', JSON.stringify(accounts)); // تحديث الحسابات
+          toggleAccounts();
+        };
+        li.appendChild(deleteBtn);
+        accountList.appendChild(li);
+      });
+    } else {
+      accountList.innerHTML = '<li>لا يوجد حسابات مضافة</li>';
+    }
+  } else {
+    accountList.style.display = 'none';
+  }
 }
 
 async function performAction(action) {
@@ -77,7 +89,7 @@ async function performAction(action) {
       const result = await response.json();
       console.log(result);
       if (result.status === 'Done') {
-        alert('تم تنفيذ الإجراء بنجاح!');
+        alert(تم ${action === 'postLike' ? 'لايك المنشور' : action === 'commentLike' ? 'لايك التعليق' : 'متابعة الصفحة'} بنجاح!);
       } else {
         alert('حدث خطأ أثناء التنفيذ!');
       }
@@ -86,7 +98,15 @@ async function performAction(action) {
       alert('فشل التنفيذ، تحقق من الاتصال أو بيانات الحساب!');
     }
   }
+  // مسح الروابط بس بعد التنفيذ، الحسابات تبقى محفوظة
+  links = [];
+  displayLinks();
 }
 
-displayLinks();
-displayAccounts();
+document.getElementById('linkInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') addLink();
+});
+
+document.getElementById('accountInput').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') addAccount();
+});
