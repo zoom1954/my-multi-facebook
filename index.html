@@ -14,20 +14,24 @@
     <button onclick="addLink()">أضف الرابط</button>
   </div>
   <div>
-    <h3>الروابط المحفوظة:</h3>
+    <h3>الروابط المضافة:</h3>
     <ul id="linkList"></ul>
   </div>
   <div>
-    <label>أضف بيانات الحسابات (إيميل:كلمة سر):</label>
+    <label>أضف بيانات الحساب (إيميل:كلمة سر):</label>
     <input type="text" id="accountInput" placeholder="email:password">
     <button onclick="addAccount()">أضف حساب</button>
+    <button onclick="toggleAccounts()">عرض الحسابات</button>
   </div>
   <div>
     <h3>الحسابات المحفوظة:</h3>
-    <ul id="accountList"></ul>
+    <ul id="accountList" style="display: none;"></ul>
   </div>
-  <button onclick="performAction('like')">اعمل لايك من كل الحسابات</button>
-  <button onclick="performAction('follow')">اعمل متابعة من كل الحسابات</button>
+  <div>
+    <button onclick="performAction('postLike')">لايك المنشور</button>
+    <button onclick="performAction('commentLike')">لايك التعليق</button>
+    <button onclick="performAction('follow')">متابعة الصفحة</button>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
