@@ -1,1 +1,33 @@
-
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi Facebook Control</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>إدارة حسابات فيسبوك</h1>
+  <div>
+    <label>أضف رابط المنشور أو الصفحة:</label>
+    <input type="text" id="linkInput" placeholder="https://facebook.com/...">
+    <button onclick="addLink()">أضف الرابط</button>
+  </div>
+  <div>
+    <h3>الروابط المحفوظة:</h3>
+    <ul id="linkList"></ul>
+  </div>
+  <div>
+    <label>أضف بيانات الحسابات (إيميل:كلمة سر):</label>
+    <input type="text" id="accountInput" placeholder="email:password">
+    <button onclick="addAccount()">أضف حساب</button>
+  </div>
+  <div>
+    <h3>الحسابات المحفوظة:</h3>
+    <ul id="accountList"></ul>
+  </div>
+  <button onclick="performAction('like')">اعمل لايك من كل الحسابات</button>
+  <button onclick="performAction('follow')">اعمل متابعة من كل الحسابات</button>
+  <script src="script.js"></script>
+</body>
+</html>
